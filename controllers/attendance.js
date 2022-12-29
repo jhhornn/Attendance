@@ -20,6 +20,18 @@ const postDetails = async (req, res) => {
     })
 }
 
+const getHomepage = (req, res) => {
+    User.find().exec((err, users) => {
+        if(err) {
+            res.json({message: err.message})
+        } else {
+            res.render("pages/index", { 
+                title: "Home Page",
+                users: users
+            })
+        }
+    })
 
+}
 
-module.exports =  { postDetails }
+module.exports =  { postDetails, getHomepage }
