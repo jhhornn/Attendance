@@ -34,4 +34,22 @@ const getHomepage = (req, res) => {
 
 }
 
-module.exports =  { postDetails, getHomepage }
+const getEditPage = (req, res) => {
+    let id = req.params.id
+    User.findById(id, (err, user) => {
+        if(err) {
+            res.redirect("/")
+        }else {
+            if (user == null) {
+                res.redirect("/")
+            } else {
+                res.render("edit_users", {
+                    title: "Edit User",
+                    user: user
+                })
+            }
+        }
+    })
+}
+
+module.exports =  { postDetails, getHomepage, getEditPage }
