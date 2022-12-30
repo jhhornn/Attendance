@@ -1,4 +1,5 @@
 const User = require("../models/users")
+const fs = require("fs")
 
 const postDetails = async (req, res) => {
     const user = new User({
@@ -84,4 +85,26 @@ const updateDetails = (req, res) => {
     })
 }
 
-module.exports =  { postDetails, getHomepage, getEditPage, updateDetails }
+const deleteDetails = (req,res) => {
+    let id = req.params.id
+    User.findByIdAndRemove(id, (err, result) => {
+        if(result.image != ""){
+            try{
+                fs.unlinkSync("./uploads/"+result.image)
+            }catch{
+                console.log(err)
+            }
+        }
+        if(err){
+            res.json({ message: err.message })
+        } else {
+            req.session.message = {
+                type: "info",
+                message: "User deleted successfully"
+            }
+            res.redirect("/")
+        }
+    })
+}
+
+module.exports =  { postDetails, getHomepage, getEditPage, updateDetails, deleteDetails }
