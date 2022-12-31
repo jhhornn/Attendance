@@ -44,7 +44,7 @@ const getEditPage = (req, res) => {
             if (user == null) {
                 res.redirect("/")
             } else {
-                res.render("edit_users", {
+                res.render("pages/edit_users", {
                     title: "Edit User",
                     user: user
                 })
