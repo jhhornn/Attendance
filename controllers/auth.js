@@ -2,11 +2,15 @@ const User = require("../models/auth")
 const handleError = require("../utils/errHandler")
 
 module.exports.signupGet = (req, res) => {
-    res.render("pages/signup")
+    res.render("pages/signup", { 
+        title: "SignUp Page"
+    })
 }
 
 module.exports.loginGet = (req, res) => {
-    res.render("pages/login")
+    res.render("pages/login", { 
+        title: "Login Page"
+    })
 }
 
 module.exports.signupPost = async (req, res) => {
