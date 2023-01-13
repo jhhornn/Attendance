@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const bcrypt = require("bcrypt")
 const { Schema } = mongoose
 const { isEmail } = require("validator")
 
@@ -33,5 +34,5 @@ AuthSchema.pre("save", async function (next){
     next()
 })
 
-const User = mongoose.model("user",  AuthSchema)
-module.exports = User
+const Auth = mongoose.model("auth",  AuthSchema)
+module.exports = Auth
