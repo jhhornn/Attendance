@@ -11,19 +11,39 @@
                     <form action="/signup" method="post" id="add-form" enctype="application/x-www-form-urlencoded">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control form-control-lg" placeholder="Enter email" required />
+                            <input type="email" name="email" class="form-control form-control-lg <%= error.email ? 'is-invalid' : '' %> " value="<%= content ? content.email.toString() : '' %>" placeholder="Enter email" required />
+                            <% if (error.email !== "") { %>
+                             <div class="invalid-feedback">
+                                <%= error.email %> 
+                             </div>
+                            <% } %>
                         </div>
                         <div class="mb-3">
                             <label for="firstName" class="form-label">First Name</label>
-                            <input type="text" name="firstName" class="form-control form-control-lg" placeholder="Enter first name" required />
+                            <input type="text" name="firstName" class="form-control form-control-lg <%= error.firstName ? 'is-invalid' : '' %> " value="<%= content ? content.firstName.toString() : '' %>" placeholder="Enter first name" required />
+                            <% if (error.firstName !== "") { %>
+                                <div class="invalid-feedback">
+                                   <%= error.firstName %> 
+                                </div>
+                               <% } %>
                         </div>
                         <div class="mb-3">
                             <label for="lastName" class="form-label">Last Name</label>
-                            <input type="text" name="lastName" class="form-control form-control-lg" placeholder="Enter last name" required />
+                            <input type="text" name="lastName" class="form-control form-control-lg <%= error.lastName ? 'is-invalid' : '' %> " value="<%= content ? content.lastName.toString() : '' %>" placeholder="Enter last name" required />
+                            <% if (error.lastName !== "") { %>
+                                <div class="invalid-feedback">
+                                   <%= error.lastName %> 
+                                </div>
+                               <% } %>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control form-control-lg" placeholder="Enter password" required />
+                            <input type="password" name="password" class="form-control form-control-lg <%= error.password ? 'is-invalid' : '' %> " placeholder="Enter password" required />
+                            <% if (error.password !== "") { %>
+                                <div class="invalid-feedback">
+                                   <%= error.password %> 
+                                </div>
+                               <% } %>
                         </div>
                         <div class="mb-3 d-grid">
                             <input type="submit" name="submit" value="Sign up" class="btn btn-secondary btn-lg" />
