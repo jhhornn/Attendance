@@ -20,7 +20,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control form-control-lg <%= error.email ? 'is-invalid' : '' %>"  placeholder="Enter password" required />
+                            <input type="password" name="password" class="form-control form-control-lg <%= error.password ? 'is-invalid' : '' %>"  placeholder="Enter password" required />
                             <% if (error.password !== "") { %>
                                 <div class="invalid-feedback">
                                    <%= error.password %> 
