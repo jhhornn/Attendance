@@ -2,13 +2,15 @@ const handleErrors = (err) => {
   let errors = { email: "", firstName: "", lastName: "", password: "" }
 
   // incorrect login email
-  if(err.message === "incorrect email") {
+  if(err.message === "Incorrect email") {
     errors.email = "email not registered"
+    return errors
   }
 
   // incorrect login password
-  if(err.message === "incorrect password") {
+  if(err.message === "Incorrect password") {
     errors.password = "incorrect password"
+    return errors
   }
 
   // duplicate error
