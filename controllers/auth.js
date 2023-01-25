@@ -69,5 +69,4 @@ module.exports.loginPost = async (req, res) => {
       content: req.session.content
     })
   }
-  
 }

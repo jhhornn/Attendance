@@ -45,7 +45,7 @@ AuthSchema.statics.login = async function (email, password) {
     }
     throw Error("Incorrect password")
   }
-  
+
   throw Error("Incorrect email")
 }
 

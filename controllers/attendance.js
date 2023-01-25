@@ -10,20 +10,17 @@ const postDetails = async (req, res) => {
       image: req.file.filename
     })
 
-   await user.save()
+    await user.save()
 
-   req.session.message = {
-    type: "success",
-    message: "User added successfully"
-  }
-  res.redirect("/")
-
+    req.session.message = {
+      type: "success",
+      message: "User added successfully"
+    }
+    res.redirect("/")
   } catch (err) {
     res.json({ message: err.message, type: "danger" })
   }
-
 }
-
 
 const getHomepage = async (req, res) => {
   try {
@@ -37,7 +34,6 @@ const getHomepage = async (req, res) => {
     res.json({ message: err.message })
   }
 }
-
 
 const getEditPage = async (req, res) => {
   try {
@@ -73,21 +69,18 @@ const updateDetails = async (req, res) => {
       new_image = req.body.old_image
     }
 
-    await User.findByIdAndUpdate(
-      id,
-      {
-        name: req.body.name,
-        email: req.body.email,
-        phone: req.body.phone,
-        image: new_image
-      })
+    await User.findByIdAndUpdate(id, {
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      image: new_image
+    })
 
-      req.session.message = {
-        type: "success",
-        message: "User updated successfully"
-      }
-      res.redirect("/")
-
+    req.session.message = {
+      type: "success",
+      message: "User updated successfully"
+    }
+    res.redirect("/")
   } catch (err) {
     res.json({ message: err.message, type: "danger" })
   }
@@ -102,7 +95,7 @@ const deleteDetails = async (req, res) => {
       try {
         fs.unlinkSync("./uploads/" + result.image)
       } catch (err) {
-        console.log (err)
+        console.log(err)
       }
     }
 
