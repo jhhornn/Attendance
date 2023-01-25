@@ -18,7 +18,9 @@ module.exports.signupGet = (req, res) => {
 
 module.exports.loginGet = (req, res) => {
   res.render("pages/login", {
-    title: "Login Page"
+    title: "Login Page",
+    error: "",
+    content: ""
   })
 }
 
@@ -38,7 +40,7 @@ module.exports.signupPost = async (req, res) => {
       lastName: lastName
     }
     res.render("pages/signup", {
-      title: "Login Page",
+      title: "Signup Page",
       error: errors,
       content: req.session.content
     })
@@ -46,5 +48,26 @@ module.exports.signupPost = async (req, res) => {
 }
 
 module.exports.loginPost = async (req, res) => {
-  res.send("pages/login")
+  const { email, password } = req.body
+
+  try {
+    const user = await Auth.login(email, password)
+    const token = createToken(user._id, user.firstName, user.lastName)
+    res.cookies("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
+    res.status(200).json({ user: user._id })
+  } catch (err) {
+    console.log(err)
+    const errors = handleError(err)
+
+    req.session.content = {
+      email: email
+    }
+
+    res.render("pages/login", {
+      title: "Login Page",
+      error: errors,
+      content: req.session.content
+    })
+  }
+  
 }
