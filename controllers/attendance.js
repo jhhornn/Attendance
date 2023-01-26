@@ -47,7 +47,8 @@ const getEditPage = async (req, res) => {
     } else {
       res.render("pages/edit_users", {
         title: "Edit User",
-        user: user
+        user: user,
+        person: req.decodedToken.firstName
       })
     }
   } catch (err) {

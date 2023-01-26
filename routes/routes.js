@@ -13,7 +13,7 @@ const {
 router.use(requireAuth)
 
 router.get("/add", (req, res) => {
-  res.render("pages/add_users", { title: "Add Users" })
+  res.render("pages/add_users", { title: "Add Users", person: req.decodedToken.firstName })
 })
 
 router.post("/add", imageUploader, postDetails)
