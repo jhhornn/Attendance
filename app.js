@@ -1,4 +1,3 @@
-require("dotenv").config()
 const express = require("express")
 const session = require("express-session")
 const attRoute = require("./routes/routes")
@@ -13,7 +12,7 @@ app.use(cookieParser())
 
 app.use(
   session({
-    secret: "my secret keys",
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
     resave: false
   })
