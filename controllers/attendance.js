@@ -28,7 +28,8 @@ const getHomepage = async (req, res) => {
 
     res.render("pages/index", {
       title: "Home Page",
-      users: users
+      users: users,
+      person: req.decodedToken.firstName
     })
   } catch (err) {
     res.json({ message: err.message })
