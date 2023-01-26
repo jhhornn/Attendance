@@ -71,7 +71,6 @@ module.exports.loginPost = async (req, res) => {
   }
 }
 
-
 module.exports.logout = async (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 })
   res.redirect("/login")
