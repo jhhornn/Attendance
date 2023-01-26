@@ -5,6 +5,7 @@ const requireAuth = require("../middlewares/authMiddleware")
 const {
   postDetails,
   getHomepage,
+  getYourPage,
   getEditPage,
   updateDetails,
   deleteDetails
@@ -19,6 +20,8 @@ router.get("/add", (req, res) => {
 router.post("/add", imageUploader, postDetails)
 
 router.get("/", getHomepage)
+
+router.get("/myusers", getYourPage)
 
 // Edit an user route
 router.get("/edit/:id", getEditPage)

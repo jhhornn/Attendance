@@ -18,6 +18,10 @@ const UserSchema = new Schema(
     image: {
       type: String,
       required: [true, "Please insert image"]
+    },
+    owner: {
+      type: String,
+      required: true
     }
   },
   { timestamps: true }

@@ -7,7 +7,8 @@ const postDetails = async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       phone: req.body.phone,
-      image: req.file.filename
+      image: req.file.filename,
+      owner: req.decodedToken.id
     })
 
     await user.save()
@@ -27,6 +28,20 @@ const getHomepage = async (req, res) => {
     const users = await User.find({})
 
     res.render("pages/index", {
+      title: "Home Page",
+      users: users,
+      person: req.decodedToken.firstName
+    })
+  } catch (err) {
+    res.json({ message: err.message })
+  }
+}
+
+const getYourPage = async (req, res) => {
+  try {
+    const users = await User.find({ owner: req.decodedToken.id })
+
+    res.render("pages/your_users", {
       title: "Home Page",
       users: users,
       person: req.decodedToken.firstName
@@ -114,6 +129,7 @@ const deleteDetails = async (req, res) => {
 module.exports = {
   postDetails,
   getHomepage,
+  getYourPage,
   getEditPage,
   updateDetails,
   deleteDetails
