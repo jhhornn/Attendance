@@ -18,6 +18,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,13 +30,17 @@
                                     <td><%= row.name %> </td>
                                     <td><%= row.email %> </td>
                                     <td><%= row.phone %> </td>
+                                    <td>
+                                        <a href="/edit/<%= row._id %>" class="text-success"><i class="fas fa-edit fa-lg mx-1"></i></a>
+                                        <a href="/delete/<%= row._id %>" class="text-danger"><i class="fas fa-trash fa-lg mx-1"></i></a>
+                                    </td>
                                 </tr>
                         
                             <% }) %>
                         </tbody>
                     </table>
                 <% } else { %>
-                    <h1 class="text-center text-secondary mt-5">No Users found in the database!</h1>
+                    <h1 class="text-center text-secondary mt-5">You haven't added any user</h1>
                 <% } %> 
             </div>
         </div>
