@@ -1,9 +1,10 @@
 const Auth = require("../models/auth")
 const handleError = require("../utils/errHandler")
+const jwt = require("jsonwebtoken")
 
 const maxAge = 3 * 24 * 60 * 60
 const createToken = (id, firstName, lastName) => {
-  return jwt.sign({ id, firstName, lastName }, "secret token", {
+  return jwt.sign({ id, firstName, lastName }, process.env.JWT_SECRET_KEY, {
     expiresIn: maxAge
   })
 }
@@ -29,11 +30,10 @@ module.exports.signupPost = async (req, res) => {
   try {
     const user = await Auth.create({ email, firstName, lastName, password })
     const token = createToken(user._id, user.firstName, user.lastName)
-    res.cookies("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
-    res.status(201).json({ user: user._id })
+    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
+    res.redirect("/")
   } catch (err) {
     const errors = handleError(err)
-    // res.json({ error: errors })
     req.session.content = {
       email: email,
       firstName: firstName,
@@ -53,8 +53,8 @@ module.exports.loginPost = async (req, res) => {
   try {
     const user = await Auth.login(email, password)
     const token = createToken(user._id, user.firstName, user.lastName)
-    res.cookies("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
-    res.status(200).json({ user: user._id })
+    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
+    res.redirect("/")
   } catch (err) {
     console.log(err)
     const errors = handleError(err)
