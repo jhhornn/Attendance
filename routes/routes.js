@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const imageUploader = require("../middlewares/imageUploader")
+const requireAuth = require("../middlewares/authMiddleware")
 const {
   postDetails,
   getHomepage,
@@ -8,6 +9,8 @@ const {
   updateDetails,
   deleteDetails
 } = require("../controllers/attendance")
+
+router.use(requireAuth)
 
 router.get("/add", (req, res) => {
   res.render("pages/add_users", { title: "Add Users" })
