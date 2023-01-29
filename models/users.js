@@ -9,15 +9,22 @@ const UserSchema = new Schema(
     },
     email: {
       type: String,
-      required: [true, "Please input email"]
+      required: [true, "Please input email"],
+      unique: false
     },
     phone: {
       type: String,
       required: [true, "Please input phone number"]
     },
     image: {
-      type: String,
-      required: [true, "Please insert image"]
+      public_id: {
+        type: String,
+        required: true
+      },
+      url: {
+        type: String,
+        required: true
+      }
     },
     owner: {
       type: String,
