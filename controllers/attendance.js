@@ -1,13 +1,25 @@
 const User = require("../models/users")
 const fs = require("fs")
+const cloudinary = require("../utils/cloudinary")
 
 const postDetails = async (req, res) => {
+  const { name, email, phone } = req.body
+  const file = req.files.image
+  console.log(file)
   try {
+    const result = await cloudinary.uploader.upload(file.tempFilePath, {
+      folder: "attendance"
+    })
+    console.log(result)
     const user = new User({
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-      image: req.file.filename,
+      name,
+      email,
+      phone,
+      image: {
+        public_id: result.public_id,
+        url: result.secure_url,
+        filename: result.original_filename
+      },
       owner: req.decodedToken.id
     })
 
@@ -19,6 +31,8 @@ const postDetails = async (req, res) => {
     }
     res.redirect("/")
   } catch (err) {
+    console.log(err)
+    fs.unlinkSync(file.tempFilePath)
     res.json({ message: err.message, type: "danger" })
   }
 }
@@ -74,16 +88,28 @@ const getEditPage = async (req, res) => {
 const updateDetails = async (req, res) => {
   try {
     const id = req.params.id
-    let new_image = ""
-    if (req.file) {
-      new_image = req.file.filename
+    const detail = await User.findById(id)
+    const file = req.files.image
+
+    let new_image = null
+    if (req.files.image) {
+      result = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: "attendance"
+      })
+      new_image = {
+        public_id: result.public_id,
+        url: result.secure_url
+      }
       try {
-        fs.unlinkSync("./uploads/" + req.body.old_image)
+        if (detail.image.filename !== undefined) {
+           fs.unlinkSync("./tmp/" + detail.image.filename)
+        }
+        await cloudinary.uploader.destroy(detail.image.public_id)
       } catch (err) {
         console.log(err)
       }
     } else {
-      new_image = req.body.old_image
+      new_image = detail.image
     }
 
     await User.findByIdAndUpdate(id, {
@@ -110,7 +136,10 @@ const deleteDetails = async (req, res) => {
 
     if (result.image != "") {
       try {
-        fs.unlinkSync("./uploads/" + result.image)
+        if (result.image.filename !== undefined) {
+           fs.unlinkSync("./tmp/" + result.image.filename)
+        }
+        await cloudinary.uploader.destroy(result.image.public_id)
       } catch (err) {
         console.log(err)
       }
@@ -120,7 +149,7 @@ const deleteDetails = async (req, res) => {
       type: "info",
       message: "User deleted successfully"
     }
-    res.redirect("/")
+    res.redirect("/myusers")
   } catch (err) {
     res.json({ message: err.message })
   }
