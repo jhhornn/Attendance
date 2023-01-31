@@ -10,7 +10,6 @@ const postDetails = async (req, res) => {
     const result = await cloudinary.uploader.upload(file.tempFilePath, {
       folder: "attendance"
     })
-    console.log(result)
     const user = new User({
       name,
       email,
@@ -31,8 +30,7 @@ const postDetails = async (req, res) => {
     }
     res.redirect("/")
   } catch (err) {
-    console.log(err)
-    fs.unlinkSync(file.tempFilePath)
+    fs.unlinkSync("./tmp/" + result.original_filename)
     res.json({ message: err.message, type: "danger" })
   }
 }
