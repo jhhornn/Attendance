@@ -20,7 +20,8 @@ router.get("/add", (req, res) => {
   })
 })
 
-router.post("/add", imageUploader, postDetails)
+// router.post("/add", imageUploader, postDetails)
+router.post("/add", postDetails)
 
 router.get("/", getHomepage)
 
@@ -29,7 +30,8 @@ router.get("/myusers", getYourPage)
 // Edit an user route
 router.get("/edit/:id", getEditPage)
 
-router.post("/update/:id", imageUploader, updateDetails)
+// router.post("/update/:id", imageUploader, updateDetails)
+router.post("/update/:id", updateDetails)
 
 router.get("/delete/:id", deleteDetails)
 
