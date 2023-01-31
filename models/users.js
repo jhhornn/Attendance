@@ -24,6 +24,10 @@ const UserSchema = new Schema(
       url: {
         type: String,
         required: true
+      },
+      filename: {
+        type: String,
+        required: true
       }
     },
     owner: {
