@@ -120,7 +120,7 @@ const updateDetails = async (req, res) => {
       }
       try {
         if (detail.image.filename !== undefined) {
-          fs.unlinkSync("./tmp/" + detail.image.filename)
+          fs.unlinkSync("/tmp/" + detail.image.filename)
         }
         await cloudinary.uploader.destroy(detail.image.public_id)
       } catch (err) {
@@ -160,7 +160,7 @@ const deleteDetails = async (req, res) => {
     if (result.image != "") {
       try {
         if (result.image.filename !== undefined) {
-          fs.unlinkSync("./tmp/" + result.image.filename)
+          fs.unlinkSync("/tmp/" + result.image.filename)
         }
         await cloudinary.uploader.destroy(result.image.public_id)
       } catch (err) {
