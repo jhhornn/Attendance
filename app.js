@@ -4,12 +4,13 @@ const attRoute = require("./routes/routes")
 const authRoute = require("./routes/auth")
 const cookieParser = require("cookie-parser")
 const fileupload = require("express-fileupload")
+const path = require("path")
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(fileupload({ useTempFiles: true, tempFileDir: "tmp", saveFileNames: true }))
+app.use(fileupload({ useTempFiles: true, tempFileDir: path.join(__dirname, "tmp"), saveFileNames: true }))
 app.use(cookieParser())
 
 app.use(
