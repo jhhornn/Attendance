@@ -1,15 +1,17 @@
 const User = require("../models/users")
 const fs = require("fs")
 const cloudinary = require("../utils/cloudinary")
+const handleError = require("../utils/errHandler")
+
 
 const postDetails = async (req, res) => {
   const { name, email, phone } = req.body
   const file = req.files.image
   console.log(file)
+  const result = await cloudinary.uploader.upload(file.tempFilePath, {
+    folder: "attendance"
+  })
   try {
-    const result = await cloudinary.uploader.upload(file.tempFilePath, {
-      folder: "attendance"
-    })
     const user = new User({
       name,
       email,
@@ -30,8 +32,25 @@ const postDetails = async (req, res) => {
     }
     res.redirect("/")
   } catch (err) {
+    const errors = handleError(err)
+
     fs.unlinkSync("./tmp/" + result.original_filename)
-    res.json({ message: err.message, type: "danger" })
+    await cloudinary.uploader.destroy(result.public_id)
+
+    req.session.content = {
+      name: name,
+      email: email,
+      phone: phone
+    }
+
+    res.render("pages/add_users", {
+      title: "Add Users",
+      error: errors,
+      content: req.session.content,
+      person: req.decodedToken.firstName
+    })
+
+    // res.json({ message: err.message, type: "danger" })
   }
 }
 
@@ -96,7 +115,8 @@ const updateDetails = async (req, res) => {
       })
       new_image = {
         public_id: result.public_id,
-        url: result.secure_url
+        url: result.secure_url,
+        filename: result.original_filename
       }
       try {
         if (detail.image.filename !== undefined) {
@@ -123,7 +143,12 @@ const updateDetails = async (req, res) => {
     }
     res.redirect("/")
   } catch (err) {
-    res.json({ message: err.message, type: "danger" })
+    req.session.message = {
+      message: err.message,
+      type: "danger"
+    }
+
+    res.redirect("/myusers")
   }
 }
 
