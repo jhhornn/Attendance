@@ -7,7 +7,7 @@ const handleError = require("../utils/errHandler")
 const postDetails = async (req, res) => {
   const { name, email, phone } = req.body
   const file = req.files.image
-  console.log(file)
+  
   const result = await cloudinary.uploader.upload(file.tempFilePath, {
     folder: "attendance"
   })
