@@ -23,12 +23,17 @@ const AuthSchema = new Schema({
   },
   password: {
     type: String,
-    required: [true, "Please enter password"],
     minlength: [6, "Minimum password length is 6 characters"]
+  },
+  googleId: {
+    type: String
   }
 })
 
 AuthSchema.pre("save", async function (next) {
+  if (!this.password) {
+    next()
+  }
   const salt = await bcrypt.genSalt()
   this.password = await bcrypt.hash(this.password, salt)
   next()
