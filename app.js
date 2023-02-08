@@ -5,7 +5,6 @@ const authRoute = require("./routes/auth")
 const oauthRoute = require("./routes/oauth")
 const cookieParser = require("cookie-parser")
 const fileupload = require("express-fileupload")
-const cookieSession = require("cookie-session")
 const passport = require("passport")
 
 require("./config/passportSetup")
@@ -19,10 +18,6 @@ app.use(
 )
 app.use(cookieParser())
 
-// app.use(cookieSession({
-//   maxAge: 20 * 60 * 60 * 1000,
-//   keys: [process.env.SESSION_SECRET]
-// }))
 
 app.use(
   session({
