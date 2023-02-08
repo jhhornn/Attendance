@@ -16,4 +16,24 @@ const requireAuth = (req, res, next) => {
   }
 }
 
-module.exports = requireAuth
+const requireOauth = (req, res, next) => {
+  if (req.user) {
+    next()
+  } else {
+    res.redirect("/login")
+  }
+}
+
+const overAuth = (req, res, next) => {
+  try {
+    if (req.cookies && req.cookies.jwt) {
+      requireAuth(req, res, next)
+    } else {
+      requireOauth(req, res, next)
+    }
+  } catch (err) {
+    res.redirect("/login")
+  }
+}
+
+module.exports = overAuth

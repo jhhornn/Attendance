@@ -24,7 +24,9 @@
                             <label for="image" class="form-label">Select Image</label>
                             <input type="file" name="image" class="form-control form-control-lg" />
                             <img src=" <%= user.image.url %> " alt="" width="100" class="img-thumbnail mt-1">
-                            <input type="hidden" name="old_image" value="<%= user.image.url %> ">
+                            <input type="hidden" name="old_image_url" value="<%= user.image.url %> ">
+                            <input type="hidden" name="old_image_public_id" value="<%= user.image.public_id %> ">
+                            <input type="hidden" name="old_image_filename" value="<%= user.image.filename %> ">
                         </div>
                         <div class="mb-3 d-grid">
                             <input type="submit" name="submit" value="Update User" class="btn btn-success btn-lg" />

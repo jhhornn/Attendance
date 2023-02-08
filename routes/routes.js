@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const imageUploader = require("../middlewares/imageUploader")
-const requireAuth = require("../middlewares/authMiddleware")
+const overAuth = require("../middlewares/authMiddleware")
 const {
   postDetails,
   getHomepage,
@@ -11,13 +11,13 @@ const {
   deleteDetails
 } = require("../controllers/attendance")
 
-router.use(requireAuth)
+router.use(overAuth)
 
 router.get("/add", (req, res) => {
   res.render("pages/add_users", {
     title: "Add Users",
     error: "",
-    person: req.decodedToken.firstName
+    person: req.decodedToken ? req.decodedToken.firstName : req.user.firstName
   })
 })
 

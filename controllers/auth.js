@@ -72,6 +72,15 @@ module.exports.loginPost = async (req, res) => {
 }
 
 module.exports.logout = async (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1 })
+  const logout = req.user
+    ? req.logout(function (err) {
+        if (err) {
+          next(err)
+        }
+      })
+    : res.cookie("jwt", "", { maxAge: 1 })
+  if (logout) {
+    return res.redirect("/login")
+  }
   res.redirect("/login")
 }
