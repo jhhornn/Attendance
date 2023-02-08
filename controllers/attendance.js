@@ -3,11 +3,14 @@ const fs = require("fs")
 const cloudinary = require("../utils/cloudinary")
 const handleError = require("../utils/errHandler")
 
+const handlePerson = (req, res) => {
+  return req.decodedToken ? req.decodedToken.firstName : req.user.firstName
+}
 
 const postDetails = async (req, res) => {
   const { name, email, phone } = req.body
   const file = req.files.image
-  
+
   const result = await cloudinary.uploader.upload(file.tempFilePath, {
     folder: "attendance"
   })
@@ -21,7 +24,7 @@ const postDetails = async (req, res) => {
         url: result.secure_url,
         filename: result.original_filename
       },
-      owner: req.decodedToken.id
+      owner: req.decodedToken ? req.decodedToken.id : req.user._id
     })
 
     await user.save()
@@ -47,7 +50,7 @@ const postDetails = async (req, res) => {
       title: "Add Users",
       error: errors,
       content: req.session.content,
-      person: req.decodedToken.firstName
+      person: handlePerson(req, res)
     })
 
     // res.json({ message: err.message, type: "danger" })
@@ -61,7 +64,7 @@ const getHomepage = async (req, res) => {
     res.render("pages/index", {
       title: "Home Page",
       users: users,
-      person: req.decodedToken.firstName
+      person: handlePerson(req, res)
     })
   } catch (err) {
     res.json({ message: err.message })
@@ -70,12 +73,14 @@ const getHomepage = async (req, res) => {
 
 const getYourPage = async (req, res) => {
   try {
-    const users = await User.find({ owner: req.decodedToken.id })
+    const users = await User.find({
+      owner: req.decodedToken ? req.decodedToken.id : req.user._id
+    })
 
     res.render("pages/your_users", {
       title: "Home Page",
       users: users,
-      person: req.decodedToken.firstName
+      person: handlePerson(req, res)
     })
   } catch (err) {
     res.json({ message: err.message })
@@ -94,7 +99,7 @@ const getEditPage = async (req, res) => {
       res.render("pages/edit_users", {
         title: "Edit User",
         user: user,
-        person: req.decodedToken.firstName
+        person: handlePerson(req, res)
       })
     }
   } catch (err) {
@@ -105,11 +110,11 @@ const getEditPage = async (req, res) => {
 const updateDetails = async (req, res) => {
   try {
     const id = req.params.id
-    const detail = await User.findById(id)
-    const file = req.files.image
+    // const detail = await User.findById(id)
 
     let new_image = null
-    if (req.files.image) {
+    if (req.files) {
+      const file = req.files.image
       result = await cloudinary.uploader.upload(file.tempFilePath, {
         folder: "attendance"
       })
@@ -119,15 +124,19 @@ const updateDetails = async (req, res) => {
         filename: result.original_filename
       }
       try {
-        if (detail.image.filename !== undefined) {
-          fs.unlinkSync("/tmp/" + detail.image.filename)
+        if (req.body.old_image.filename !== undefined) {
+          fs.unlinkSync("/tmp/" + req.body.old_image_filename)
         }
-        await cloudinary.uploader.destroy(detail.image.public_id)
+        await cloudinary.uploader.destroy(req.body.old_image_public_id)
       } catch (err) {
         console.log(err)
       }
     } else {
-      new_image = detail.image
+      new_image = {
+        public_id: req.body.old_image_public_id,
+        url: req.body.old_image_url,
+        filename: req.body.old_image_filename
+      }
     }
 
     await User.findByIdAndUpdate(id, {
@@ -143,6 +152,7 @@ const updateDetails = async (req, res) => {
     }
     res.redirect("/")
   } catch (err) {
+    console.log(err)
     req.session.message = {
       message: err.message,
       type: "danger"
