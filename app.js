@@ -11,6 +11,7 @@ require("./config/passportSetup")
 
 const app = express()
 
+app.enable('trust proxy')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(
