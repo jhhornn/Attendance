@@ -1,19 +1,23 @@
 const { Router } = require("express")
-const authRouter = require("./auth")
+const passport = require("passport")
 
 const oauthRouter = Router()
 
-// auth login
-authRouter.get("/login", (req, res) => {
-    res.render("pages/login")
-})
-
-// auth logout
-authRouter.get("/logout", (req, res) => {
-    res.send("logging out")
-})
 
 // auth with google
-authRouter.get("login", (req, res) => {
-    res.send("logging in with google")
-})
+oauthRouter.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"]
+  })
+)
+
+oauthRouter.get(
+  "/google/redirect",
+  passport.authenticate("google"),
+  (req, res) => {
+    res.redirect("/")
+  }
+)
+
+module.exports = oauthRouter
